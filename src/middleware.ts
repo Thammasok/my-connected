@@ -1,7 +1,22 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-export default clerkMiddleware()
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  // '/api/clerk-webhook',
+  // '/api/drive-activity/notification',
+  // '/api/payment/success'
+])
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) auth().protect()
+})
 
 export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)']
 }
+
+// https://www.googleapis.com/auth/userinfo.email
+// https://www.googleapis.com/auth/userinfo.profile
+// https://www.googleapis.com/auth/drive.activity.readonly
+// https://www.googleapis.com/auth/drive.metadata
+// https://www.googleapis.com/auth/drive.readonly
