@@ -35,6 +35,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
     modal: React.ReactNode,
     fetchData?: () => Promise<any>
   ) => {
+    console.log(modal)
     if (modal) {
       if (fetchData) {
         setData({ ...data, ...(await fetchData()) } || {})
